@@ -6,3 +6,57 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  image         String?
+  emailVerified DateTime?
+
+  accounts Account[]
+  sessions Session[]
+
+  images Image[]
+}
+
+model Account {
+  id                String @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+
+  access_token  String?
+  refresh_token String?
+  expires_at    Int?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Image {
+  id       String @id @default(cuid())
+  userId   String
+  prompt   String
+  imageUrl String
+  status   String @default("PENDING") // PENDING | SUCCESS | FAILED
+
+  model String? // which AI model used
+  size  String? // 512x512 etc
+  style String? // optional future use
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
