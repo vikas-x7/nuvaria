@@ -1,0 +1,8 @@
+import { NextRequest } from 'next/server';
+import { ImageController } from '../../../../server/image/image.controller';
+
+const controller = new ImageController();
+
+export async function POST(req: NextRequest) {
+    return controller.handleGenerate(req);
+}
