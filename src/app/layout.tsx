@@ -1,22 +1,34 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Instrument_Serif, Poppins, Inter, Adamina } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-instrument-serif",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const poppins = Poppins({
   subsets: ["latin"],
+  weight: ["400", "600"],
+  variable: "--font-poppins",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
+
+const adamina = Adamina({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-adamina",
 });
 
 export const metadata: Metadata = {
-  title: "nuvaria",
-  description: "AI image generator",
+  title: "Nuvaria",
+  description: "An Ai image generator ",
 };
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -25,8 +37,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${instrumentSerif.variable} ${poppins.variable} ${inter.variable} ${adamina.variable}`}
     >
+
+      
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

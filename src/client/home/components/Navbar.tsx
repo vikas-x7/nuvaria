@@ -17,15 +17,7 @@ export default function Navbar() {
         </div>
 
         <div className="hidden md:flex items-center gap-8 text-sm">
-          <Link href="/features" className="hover:text-gray-300 duration-150">
-            AI image
-          </Link>
-          <Link href="/pricing" className="hover:text-gray-300 duration-150">
-            AI video
-          </Link>
-          <Link href="/gallery" className="hover:text-gray-300 duration-150">
-            AI voice
-          </Link>
+       
           <Link
             href="/login"
             className="px-4 py-2 bg-white text-black rounded-md hover:bg-gray-200 duration-150"
