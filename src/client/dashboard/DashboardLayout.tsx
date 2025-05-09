@@ -1,7 +1,16 @@
+"use client";
+
 import React from 'react';
 import { Plus, MessageSquare, Settings, User } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+    const router = useRouter();
+
+    const handleNewChat = () => {
+        router.push(`/dashboard?t=${Date.now()}`);
+    };
+
     return (
         <div className="flex h-screen w-full bg-[#0F0F0F] text-white overflow-hidden font-[DM_Sans]">
             {/* Sidebar */}
@@ -11,7 +20,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </div>
 
                 <div className="px-3 mt-4">
-                    <button className="w-full flex items-center justify-center gap-2 bg-white text-black py-2.5 px-4 rounded-xl hover:bg-gray-200 transition-colors font-medium">
+                    <button onClick={handleNewChat} className="w-full flex items-center justify-center gap-2 bg-white text-black py-2.5 px-4 rounded-xl hover:bg-gray-200 transition-colors font-medium">
                         <Plus className="w-5 h-5" />
                         <span>New Chat</span>
                     </button>
