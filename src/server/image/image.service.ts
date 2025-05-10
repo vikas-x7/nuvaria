@@ -56,4 +56,16 @@ export class ImageService {
             size: existingImage.size || undefined,
         });
     }
+
+    async deleteUserImage(id: string, userId: string): Promise<void> {
+        const existingImage = await this.getImageById(id);
+        if (!existingImage) {
+            throw new Error('Image not found');
+        }
+        if (existingImage.userId !== userId) {
+            throw new Error('Forbidden'); // Using a general message, controller map to 403
+        }
+
+        await this.repository.deleteImage(id);
+    }
 }

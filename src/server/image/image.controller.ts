@@ -81,4 +81,27 @@ export class ImageController {
             return NextResponse.json({ success: false, error: msg }, { status: 500 });
         }
     }
+
+    async handleDelete(req: NextRequest, { params }: { params: { id: string } }) {
+        try {
+            const paramId = idSchema.parse({ id: params.id }).id;
+            const userId = this.getUserId(req);
+
+            await this.service.deleteUserImage(paramId, userId);
+            // Reusing NextResponse with just success since 200 is default or empty 204
+            return NextResponse.json({ success: true, message: 'Generation deleted successfully' }, { status: 200 });
+        } catch (error) {
+            if (error instanceof z.ZodError) {
+                return NextResponse.json({ success: false, error: error.errors }, { status: 400 });
+            }
+            const msg = error instanceof Error ? error.message : 'Unknown error';
+            if (msg === 'Image not found') {
+                return NextResponse.json({ success: false, error: msg }, { status: 404 });
+            }
+            if (msg === 'Forbidden') {
+                return NextResponse.json({ success: false, error: 'Only owner can delete' }, { status: 403 });
+            }
+            return NextResponse.json({ success: false, error: msg }, { status: 500 });
+        }
+    }
 }

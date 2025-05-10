@@ -34,4 +34,10 @@ export class ImageRepository {
             where: { id },
         });
     }
+
+    async deleteImage(id: string): Promise<void> {
+        await prisma.image.delete({
+            where: { id },
+        });
+    }
 }
