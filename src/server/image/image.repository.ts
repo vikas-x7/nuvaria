@@ -1,5 +1,5 @@
-import prisma from '../db';
-import { Image } from '../../../generated/prisma';
+import { prisma } from '@/lib/prisma';
+import { Image } from '../../../generated/prisma/client';
 
 export class ImageRepository {
     async createImage(userId: string, prompt: string, model?: string, size?: string): Promise<Image> {

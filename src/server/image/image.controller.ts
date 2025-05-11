@@ -26,7 +26,7 @@ export class ImageController {
             return NextResponse.json({ success: true, data: result }, { status: 201 });
         } catch (error) {
             if (error instanceof z.ZodError) {
-                return NextResponse.json({ success: false, error: error.errors }, { status: 400 });
+                return NextResponse.json({ success: false, error: error.issues }, { status: 400 });
             }
             const msg = error instanceof Error ? error.message : 'Unknown error';
             return NextResponse.json({ success: false, error: msg }, { status: 500 });
@@ -57,7 +57,7 @@ export class ImageController {
             return NextResponse.json({ success: true, data: image }, { status: 200 });
         } catch (error) {
             if (error instanceof z.ZodError) {
-                return NextResponse.json({ success: false, error: error.errors }, { status: 400 });
+                return NextResponse.json({ success: false, error: error.issues }, { status: 400 });
             }
             const msg = error instanceof Error ? error.message : 'Unknown error';
             return NextResponse.json({ success: false, error: msg }, { status: 500 });
@@ -72,7 +72,7 @@ export class ImageController {
             return NextResponse.json({ success: true, data: result }, { status: 201 });
         } catch (error) {
             if (error instanceof z.ZodError) {
-                return NextResponse.json({ success: false, error: error.errors }, { status: 400 });
+                return NextResponse.json({ success: false, error: error.issues }, { status: 400 });
             }
             const msg = error instanceof Error ? error.message : 'Unknown error';
             if (msg === 'Image not found') {
@@ -92,7 +92,7 @@ export class ImageController {
             return NextResponse.json({ success: true, message: 'Generation deleted successfully' }, { status: 200 });
         } catch (error) {
             if (error instanceof z.ZodError) {
-                return NextResponse.json({ success: false, error: error.errors }, { status: 400 });
+                return NextResponse.json({ success: false, error: error.issues }, { status: 400 });
             }
             const msg = error instanceof Error ? error.message : 'Unknown error';
             if (msg === 'Image not found') {

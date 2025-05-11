@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { ImageController } from '@/server/image/image.controller';
+import { ImageController } from '@/src/server/image/image.controller';
 
 const controller = new ImageController();
 

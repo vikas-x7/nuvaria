@@ -1,6 +1,6 @@
 import { ImageRepository } from './image.repository';
 import { GenerateImageDto } from './image.validation';
-import { Image } from '../../../generated/prisma';
+import { Image } from '../../../generated/prisma/client';
 
 export class ImageService {
     private repository: ImageRepository;
