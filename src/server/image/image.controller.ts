@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@/src/auth';
 import { ImageService } from './image.service';
 import { generateImageSchema, idSchema } from './image.validation';
 import { z } from 'zod';
@@ -10,17 +11,20 @@ export class ImageController {
         this.service = new ImageService();
     }
 
-    // Helper to extract a dummy user id. In a real app, use auth() or getSession().
-    private getUserId(req: NextRequest): string {
-        // Dummy user ID for testing. Replace with NextAuth authentication.
-        return req.headers.get('x-user-id') || 'temp-user-id';
+    // Helper to extract the authenticated user id
+    private async getUserId(req: NextRequest): Promise<string> {
+        const session = await auth();
+        if (!session?.user?.id) {
+            throw new Error('Unauthorized');
+        }
+        return session.user.id;
     }
 
     async handleGenerate(req: NextRequest) {
         try {
             const body = await req.json();
             const parsedBody = generateImageSchema.parse(body);
-            const userId = this.getUserId(req);
+            const userId = await this.getUserId(req);
 
             const result = await this.service.generateImage(userId, parsedBody);
             return NextResponse.json({ success: true, data: result }, { status: 201 });
@@ -35,7 +39,7 @@ export class ImageController {
 
     async handleGetAll(req: NextRequest) {
         try {
-            const userId = this.getUserId(req);
+            const userId = await this.getUserId(req);
             const images = await this.service.getUserImages(userId);
             return NextResponse.json({ success: true, data: images }, { status: 200 });
         } catch (error) {
@@ -85,7 +89,7 @@ export class ImageController {
     async handleDelete(req: NextRequest, { params }: { params: { id: string } }) {
         try {
             const paramId = idSchema.parse({ id: params.id }).id;
-            const userId = this.getUserId(req);
+            const userId = await this.getUserId(req);
 
             await this.service.deleteUserImage(paramId, userId);
             // Reusing NextResponse with just success since 200 is default or empty 204
