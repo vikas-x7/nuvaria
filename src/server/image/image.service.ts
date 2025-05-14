@@ -11,7 +11,7 @@ export class ImageService {
 
     async generateImage(userId: string, dto: GenerateImageDto): Promise<Image> {
         // 1. Create a pending image record in the database
-        const imageRecord = await this.repository.createImage(userId, dto.prompt, dto.model, dto.size);
+        const imageRecord = await this.repository.createImage(userId, dto.prompt, dto.model, dto.size, dto.chatId);
 
         try {
             // 2. Here you would normally call your external AI provider
@@ -54,6 +54,7 @@ export class ImageService {
             prompt: existingImage.prompt,
             model: existingImage.model || undefined,
             size: existingImage.size || undefined,
+            chatId: existingImage.chatId || undefined,
         });
     }
 
