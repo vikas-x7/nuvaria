@@ -1,15 +1,33 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Plus, MessageSquare, Settings, User } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+    const [chats, setChats] = useState<any[]>([]);
+
+    useEffect(() => {
+        fetch('/api/chat')
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && Array.isArray(data.data)) {
+                    setChats(data.data);
+                }
+            })
+            .catch(console.error);
+    }, [pathname, searchParams]);
 
     const handleNewChat = () => {
-        router.push(`/dashboard?t=${Date.now()}`);
+        router.push(`/dashboard`);
     };
+
+    const handleOpenChat = (id: string) => {
+        router.push(`/dashboard?chatId=${id}`);
+    }
 
     return (
         <div className="flex h-screen w-full bg-[#0F0F0F] text-white overflow-hidden font-[DM_Sans]">
@@ -27,16 +45,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </div>
 
                 <div className="flex-1 overflow-y-auto mt-6 px-3 space-y-1">
-                    {/* Recent chats placeholder */}
                     <div className="text-xs text-gray-500 font-semibold mb-3 px-2 uppercase tracking-wider">Recent</div>
-                    <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-[#2A2A2A] text-gray-300 transition-colors text-sm text-left">
-                        <MessageSquare className="w-4 h-4 flex-shrink-0" />
-                        <span className="truncate">How to build an AI app</span>
-                    </button>
-                    <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-[#2A2A2A] text-gray-300 transition-colors text-sm text-left">
-                        <MessageSquare className="w-4 h-4 flex-shrink-0" />
-                        <span className="truncate">React layout ideas</span>
-                    </button>
+                    {chats.map(chat => (
+                        <button key={chat.id} onClick={() => handleOpenChat(chat.id)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-[#2A2A2A] text-gray-300 transition-colors text-sm text-left">
+                            <MessageSquare className="w-4 h-4 flex-shrink-0" />
+                            <span className="truncate">{chat.title || 'Nuvaria Chat'}</span>
+                        </button>
+                    ))}
+                    {chats.length === 0 && (
+                        <div className="text-gray-500 text-xs px-2 text-center mt-4">No recent chats</div>
+                    )}
                 </div>
 
                 <div className="p-3 border-t border-[#2E2E2E]">
