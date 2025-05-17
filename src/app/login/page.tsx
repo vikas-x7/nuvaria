@@ -1,4 +1,4 @@
-import { signIn } from "@/src/auth";
+import { signIn } from "@/lib/auth";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 
 export default function LoginPage() {

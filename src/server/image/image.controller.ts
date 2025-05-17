@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/src/auth';
+import { auth } from '@/lib/auth';
 import { ImageService } from './image.service';
 import { generateImageSchema, idSchema } from './image.validation';
 import { z } from 'zod';
@@ -14,7 +14,13 @@ export class ImageController {
     // Helper to extract the authenticated user id
     private async getUserId(req: NextRequest): Promise<string> {
         const session = await auth();
+        console.log("ImageController session:", session);
         if (!session?.user?.id) {
+            console.error("Unauthorized: Session or User ID is missing in image.");
+            if (process.env.NODE_ENV === 'development') {
+                console.warn("Using fallback dummy-user-id for development testing.");
+                return 'dummy-user-id';
+            }
             throw new Error('Unauthorized');
         }
         return session.user.id;

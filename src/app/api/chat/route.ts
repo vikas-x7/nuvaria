@@ -3,6 +3,8 @@ import { ChatController } from '@/src/server/chat/chat.controller';
 
 const controller = new ChatController();
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: NextRequest) {
     return controller.handleGetAll(req);
 }

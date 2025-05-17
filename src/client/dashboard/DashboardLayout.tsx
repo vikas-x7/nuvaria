@@ -11,7 +11,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     const [chats, setChats] = useState<any[]>([]);
 
     useEffect(() => {
-        fetch('/api/chat')
+        fetch('/api/chat', { cache: 'no-store' })
             .then(res => res.json())
             .then(data => {
                 if (data.success && Array.isArray(data.data)) {

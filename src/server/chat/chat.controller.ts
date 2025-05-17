@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/src/auth';
+import { auth } from '@/lib/auth';
 import { ChatService } from './chat.service';
 import { createChatSchema, chatIdSchema } from './chat.validation';
 import { z } from 'zod';
@@ -13,7 +13,13 @@ export class ChatController {
 
     private async getUserId(): Promise<string> {
         const session = await auth();
+        console.log("ChatController session:", session);
         if (!session?.user?.id) {
+            console.error("Unauthorized: Session or User ID is missing in chat.");
+            if (process.env.NODE_ENV === 'development') {
+                console.warn("Using fallback dummy-user-id for development testing.");
+                return 'dummy-user-id';
+            }
             throw new Error('Unauthorized');
         }
         return session.user.id;
@@ -45,6 +51,7 @@ export class ChatController {
             const chats = await this.service.getUserChats(userId);
             return NextResponse.json({ success: true, data: chats }, { status: 200 });
         } catch (error) {
+            console.error("handleGetAll error:", error);
             if (error instanceof Error && error.message === 'Unauthorized') {
                 return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
             }
