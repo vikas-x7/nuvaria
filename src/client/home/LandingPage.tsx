@@ -13,7 +13,7 @@ export default function LandingPage() {
       <Navbar />
       <Hero />
      <CardSection />
-     <ServicesSection />
+     {/* <ServicesSection /> */}
      <VideoHeroCTA />
      <div className="bg-[#0A0A0A] md:px-30 ">
      <Footer/>
