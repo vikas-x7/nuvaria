@@ -9,9 +9,11 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^3.0.52",
     "@auth/prisma-adapter": "^2.11.1",
     "@prisma/adapter-pg": "^7.7.0",
     "@prisma/client": "^7.7.0",
+    "ai": "^6.0.159",
     "dotenv": "^17.4.1",
     "framer-motion": "^12.38.0",
     "lucide-react": "^1.7.0",
